@@ -11,5 +11,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3e050dca4aae43d5b5c243aca34c4d9, type: 3}
   m_Name: GoogleDriveSaveManager
   m_EditorClassIdentifier: 
-  m_appKey: 3rltacuk3h5651l
+  m_projectName: KillTeamTracker
+  m_projectId: killteamtracker
+  m_appId: 373568704199-l2qdlvjmvju8ntlfh8om7f5t8snhs69u.apps.googleusercontent.com
+  m_appSecret: aLvM9B7hkqJ1M7pG1gJcVJCF
+  m_projectNumber: 373568704199
   m_callbackUri: 
