@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "GlobalManager", menuName = "Manager/GlobalManager")]
@@ -28,9 +29,21 @@ public class Managers : ScriptableObject
     {
         Type type = typeof(T);
         T target = default(T);
+        object result = GetManager(type);
+        if(result != null)
+        {
+            target = (T)result;
+        }
+
+        return target;
+    }
+
+    public object GetManager(Type type)
+    {
+        object target = null;
         if (m_ManagersDictionary.ContainsKey(type))
         {
-            target = (T)m_ManagersDictionary[type];
+            target = m_ManagersDictionary[type];
         }
         else
         {
@@ -38,7 +51,7 @@ public class Managers : ScriptableObject
             {
                 if (type.IsAssignableFrom(managerPair.Key))
                 {
-                    target = (T)managerPair.Value;
+                    target = managerPair.Value;
                 }
             }
         }
@@ -100,6 +113,31 @@ public class Managers : ScriptableObject
             m_ManagersDictionary[manager.GetType()] = manager;
         }
     }
+
+	public void Inject(object target)
+	{
+        FieldInfo[] fields = target.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance |BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Static);
+        foreach(FieldInfo field in fields)
+        {
+            foreach(object attribute in field.GetCustomAttributes(true))
+            {
+                InjectableAttribute injectableAttribute = attribute as InjectableAttribute;
+                if(injectableAttribute == null)
+                {
+                    continue;
+                }
+
+                Type targetType = field.FieldType;
+                object targetValue = GetManager(targetType);
+                if(targetValue == null)
+                {
+                    continue;
+                }
+
+                field.SetValue(target, targetValue);
+            }
+        }
+	}
 
     [System.Diagnostics.Conditional("UNITY_EDITOR")]
     private void ListenForChangePlayMode()

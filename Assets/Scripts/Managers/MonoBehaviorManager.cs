@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonoBehaviorManager : MonoBehaviour, IManager
+public class MonoBehaviorManager : KillTeamMonoBehaviour, IManager
 {
     public virtual void Initialize()
     {

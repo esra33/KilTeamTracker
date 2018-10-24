@@ -5,7 +5,10 @@ public interface IManager
     void Initialize();
 }
 
-public class ScriptableManager : ScriptableObject, IManager
+public class ScriptableManager : KillTeamScriptableObject, IManager
 {
-    public virtual void Initialize(){}
+    public virtual void Initialize()
+    {
+        Awake();
+    }
 }

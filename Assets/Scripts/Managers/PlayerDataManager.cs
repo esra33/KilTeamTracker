@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlayerDataManager", menuName = "Manager/PlayerDataManager")]
 public class PlayerDataManager : ScriptableManager
 {
+    [Injectable] private SaveManager m_saveManager;
     private const string FILE_NAME = "killTeamPlayerProfile.json";
 
     [SerializeField] private PlayerProfile m_PlayerProfile = null;
@@ -18,7 +19,7 @@ public class PlayerDataManager : ScriptableManager
     [ContextMenu("Load Profile")]
     public void LoadProfile()
     {
-        Managers.instance.GetManager<SaveManager>().LoadJson<PlayerProfile>(FILE_NAME, (result) =>
+        m_saveManager.LoadJson<PlayerProfile>(FILE_NAME, (result) =>
         {
             m_PlayerProfile = result;
         });
@@ -27,7 +28,7 @@ public class PlayerDataManager : ScriptableManager
     [ContextMenu("Save Profile")]
     public void SaveProfile()
     {
-        Managers.instance.GetManager<SaveManager>().SaveJson<PlayerProfile>(FILE_NAME, m_PlayerProfile, (success) => {
+        m_saveManager.SaveJson<PlayerProfile>(FILE_NAME, m_PlayerProfile, (success) => {
             if(!success)
             {
                 Debug.LogError("Failed Saving the profile");
